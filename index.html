@@ -3,70 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registros de Ocorrências</title>
-    <link rel="stylesheet" href="assets/styles.css">
+    <title>Login - Registro de Ocorrências</title>
+    <link rel="stylesheet" href="assets/login.css">
 </head>
 <body>
-    <script type="module">
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
-
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                // Redirecionar para a página de login se o usuário não estiver autenticado
-                window.location.href = "login.html";
-            }
-        });
-    </script>
-
-    <div style="text-align: center; margin-bottom: 20px;">
-        <img src="assets/images/logo.jpeg" alt="logo" style="max-width: 150px">
-        <h1>Registros de Ocorrências de Desastres Naturais</h1>
+    <!-- Container de login -->
+    <div class="login-container">
+        <!-- Cabeçalho com logo e título -->
+    <header style="text-align: center; margin-bottom: 20px;">
+        <img src="assets/images/logo.jpeg" alt="Logo" style="max-width: 100px; border-radius: 10px; margin-bottom: 10px;">
+    </header>
+        <h1>Login</h1>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="E-mail" required>
+            <input type="password" id="password" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+            <p id="errorMessage"></p>
+        </form>
     </div>
-    
-    <label for="monthSelector">Selecione o Mês:</label>
-    <select id="monthSelector">
-        <option value="1">Janeiro</option>
-        <option value="2">Fevereiro</option>
-        <option value="3">Março</option>
-        <option value="4">Abril</option>
-        <option value="5">Maio</option>
-        <option value="6">Junho</option>
-        <option value="7">Julho</option>
-        <option value="8">Agosto</option>
-        <option value="9">Setembro</option>
-        <option value="10">Outubro</option>
-        <option value="11">Novembro</option>
-        <option value="12">Dezembro</option>
-    </select>
 
-    <label for="statusSelector">Selecione o Status:</label>
-    <select id="statusSelector">
-        <option value="0">Pendente</option>
-        <option value="1">Em execução</option>
-        <option value="2">Concluído</option>
-    </select>
-
-    <button class="button" id="openChartButton" onclick="window.location.href='grafico.html';">Abrir Gráfico</button>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Nº</th>
-                <th>Data/Hora</th>
-                <th>Nome</th>
-                <th>Tipo de Desastre</th>
-                <th>Endereço</th>
-                <th>Número</th>
-                <th>Descrição</th>
-                <th>Localização</th>
-                <th>Imagem</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody id="occurrencesBody"></tbody>
-    </table>
-
-    <script type="module" src="js/script.js" defer></script>
+    <script type="module" src="js/login.js"></script>
 </body>
 </html>
