@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros de Ocorrências</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <img src="logo.jpeg" alt="logo">
+        <h1>Registros de Ocorrências de Desastres Naturais</h1>
+    </div>
+    
+    <div class="filters">
+        <div>
+            <label for="monthSelector">Selecione o Mês:</label>
+            <select id="monthSelector">
+                <option value="">Todos</option>
+                <option value="1">Janeiro</option>
+                <option value="2">Fevereiro</option>
+                <option value="3">Março</option>
+                <option value="4">Abril</option>
+                <option value="5">Maio</option>
+                <option value="6">Junho</option>
+                <option value="7">Julho</option>
+                <option value="8">Agosto</option>
+                <option value="9">Setembro</option>
+                <option value="10">Outubro</option>
+                <option value="11">Novembro</option>
+                <option value="12">Dezembro</option>
+            </select>
+        </div>
+        <div>
+            <label for="statusSelector">Selecione o Status:</label>
+            <select id="statusSelector">
+                <option value="4">Todos</option>
+                <option value="0">Pendente</option>
+                <option value="1">Em execução</option>
+                <option value="2">Concluído</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="button" id="openChartButton" onclick="window.location.href='grafico.html';">Abrir Gráfico</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nº</th>
+                <th>Data</th>
+                <th>Nome</th>
+                <th>Tipo de Desastre</th>
+                <th>Endereço</th>
+                <th>Número</th>
+                <th>Descrição</th>
+                <th>Localização</th>
+                <th>Imagem</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="occurrencesBody">
+        </tbody>
+    </table>
+
+    <script src="script.js"></script>
+</body>
+</html>
