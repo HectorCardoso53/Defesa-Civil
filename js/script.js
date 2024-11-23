@@ -13,16 +13,23 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const audio = new Audio('sirene de escola - Efeito sonoro.mp3');
+const audio = new Audio('assets/images/sirene de escola - Efeito sonoro.mp3');
 let displayedOccurrenceIds = [];
 let lastTimestamp = null;
 
 function loadOccurrences(month = null, status = null) {
     console.log("Carregando ocorrências...");
     const occurrencesBody = document.getElementById('occurrencesBody');
+    occurrencesBody.innerHTML = ''; // Limpa a tabela para recarregar
+
+    const loadingMessage = document.createElement('tr');
+    loadingMessage.innerHTML = '<td colspan="10" style="text-align:center;">Carregando...</td>';
+    occurrencesBody.appendChild(loadingMessage);
+
     let occurrenceCount = 0;
     onSnapshot(collection(db, "occurrences"), (snapshot) => {
-        occurrencesBody.innerHTML = ''; 
+        occurrencesBody.innerHTML = ''; // Limpa a tabela antes de adicionar os resultados
+
         let index = 0;
         let hasNewOccurrence = false;
 
@@ -50,9 +57,7 @@ function loadOccurrences(month = null, status = null) {
 
             // Verificar se o mês e o status coincidem com os filtros
             const monthMatches = month ? occurrenceMonth === month : true;
-            const statusMatches = 
-                (status === 4) ||               // Mostrar todos
-                (status !== null && status === occurrenceStatus); // Exibir apenas status correspondentes
+            const statusMatches = (status !== null && status === occurrenceStatus); // Exibir apenas status correspondentes
 
             if (!monthMatches || !statusMatches) {
                 return; // Ignorar ocorrências que não correspondem aos filtros
@@ -112,21 +117,29 @@ function getStatusClass(status) {
     return statusClasses[status] || '';
 }
 
-loadOccurrences();
+// Definir o mês atual e o status "Pendente" como padrão
+const currentMonth = new Date().getMonth() + 1;  // Meses começam do 0 no JavaScript, então adiciona 1
+const currentStatus = 0;  // Pendente
+
+loadOccurrences(currentMonth, currentStatus);
 
 const monthSelector = document.getElementById('monthSelector');
 const statusSelector = document.getElementById('statusSelector');
 
+// Definir o valor selecionado dos filtros ao carregar
+monthSelector.value = currentMonth;
+statusSelector.value = currentStatus;
+
 monthSelector.addEventListener('change', () => {
-    const selectedMonth = parseInt(monthSelector.value) || null;
-    const selectedStatus = parseInt(statusSelector.value) || 4;
+    const selectedMonth = parseInt(monthSelector.value);
+    const selectedStatus = parseInt(statusSelector.value);
     console.log(`Mês selecionado: ${selectedMonth}, Status selecionado: ${selectedStatus}`);
     loadOccurrences(selectedMonth, selectedStatus);
 });
 
 statusSelector.addEventListener('change', () => {
-    const selectedStatus = parseInt(statusSelector.value) || 4;
-    const selectedMonth = parseInt(monthSelector.value) || null;
+    const selectedStatus = parseInt(statusSelector.value);
+    const selectedMonth = parseInt(monthSelector.value);
     console.log(`Mês selecionado: ${selectedMonth}, Status selecionado: ${selectedStatus}`);
     loadOccurrences(selectedMonth, selectedStatus);
 });

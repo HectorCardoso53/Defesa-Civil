@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de Ocorrências por Mês</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            width: 80%;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZLAxqJiaFckcBL5Hb3e5ldQ3hhlacWx4",
+            authDomain: "conecta-orixi.firebaseapp.com",
+            projectId: "conecta-orixi",
+            storageBucket: "conecta-orixi.appspot.com",
+            messagingSenderId: "1040105797660",
+            appId: "1:1040105797660:web:18d67b8c104d09543dc7d9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        function fetchOccurrencesData() {
+            const monthlyCounts = Array(12).fill(0); // Inicializa um array com 12 valores (um para cada mês)
+
+            onSnapshot(collection(db, "occurrences"), (snapshot) => {
+                if (snapshot.empty) {
+                    console.log("Nenhuma ocorrência encontrada.");
+                    return;
+                }
+
+                snapshot.forEach(doc => {
+                    const occurrence = doc.data();
+                    const timestamp = occurrence.timestamp; // Supondo que você tenha o timestamp da ocorrência
+                    const date = new Date(timestamp.seconds * 1000); // Convertendo para objeto Date
+                    const month = date.getMonth(); // Obtendo o mês (0-11)
+
+                    // Incrementa a contagem de ocorrências para o mês correspondente
+                    monthlyCounts[month] += 1;
+                });
+
+                renderChart(monthlyCounts);
+            });
+        }
+
+        function renderChart(monthlyCounts) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            const ctx = document.getElementById('occurrencesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line', // Tipo de gráfico: linha
+                data: {
+                    labels: months, // Meses do ano
+                    datasets: [{
+                        label: 'Ocorrências por Mês',
+                        data: monthlyCounts, // Contagem de ocorrências por mês
+                        borderColor: 'blue',
+                        backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                        fill: true, // Preenchimento abaixo da linha
+                        tension: 0.1, // Suaviza a linha
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        fetchOccurrencesData();
+    </script>
+</head>
+<body>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <img src="assets/images/logo.jpeg" alt="logo" style="max-width: 150px">
+    </div>
+    <h1>Gráfico de Ocorrências por Mês</h1>
+    <canvas id="occurrencesChart"></canvas>
+</body>
+</html>

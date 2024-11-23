@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Registro de Ocorrências</title>
+    <link rel="stylesheet" href="assets/login.css">
+</head>
+<body>
+    <!-- Container de login -->
+    <div class="login-container">
+        <header style="text-align: center; margin-bottom: 20px;">
+            <img src="assets/images/logo.jpeg" alt="Logo" style="max-width: 100px; border-radius: 10px; margin-bottom: 10px;">
+        </header>
+        <h1>Login</h1>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="E-mail" required>
+            <input type="password" id="password" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+            <p id="errorMessage"></p>
+        </form>
+        <!-- Barra de carregamento -->
+        <div class="loading-bar" id="loadingBar" style="display: none;"></div>
+    </div>
+    
+
+    <script type="module" src="js/login.js"></script>
+</body>
+</html>

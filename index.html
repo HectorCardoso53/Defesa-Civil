@@ -4,43 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registros de Ocorrências</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-    <div class="header">
-        <img src="logo.jpeg" alt="logo">
+    <script type="module">
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // Redirecionar para a página de login se o usuário não estiver autenticado
+                window.location.href = "login.html";
+            }
+        });
+    </script>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        <img src="assets/images/logo.jpeg" alt="logo" style="max-width: 150px">
         <h1>Registros de Ocorrências de Desastres Naturais</h1>
     </div>
     
-    <div class="filters">
-        <div>
-            <label for="monthSelector">Selecione o Mês:</label>
-            <select id="monthSelector">
-                <option value="">Todos</option>
-                <option value="1">Janeiro</option>
-                <option value="2">Fevereiro</option>
-                <option value="3">Março</option>
-                <option value="4">Abril</option>
-                <option value="5">Maio</option>
-                <option value="6">Junho</option>
-                <option value="7">Julho</option>
-                <option value="8">Agosto</option>
-                <option value="9">Setembro</option>
-                <option value="10">Outubro</option>
-                <option value="11">Novembro</option>
-                <option value="12">Dezembro</option>
-            </select>
-        </div>
-        <div>
-            <label for="statusSelector">Selecione o Status:</label>
-            <select id="statusSelector">
-                <option value="4">Todos</option>
-                <option value="0">Pendente</option>
-                <option value="1">Em execução</option>
-                <option value="2">Concluído</option>
-            </select>
-        </div>
-    </div>
+    <label for="monthSelector">Selecione o Mês:</label>
+    <select id="monthSelector">
+        <option value="1">Janeiro</option>
+        <option value="2">Fevereiro</option>
+        <option value="3">Março</option>
+        <option value="4">Abril</option>
+        <option value="5">Maio</option>
+        <option value="6">Junho</option>
+        <option value="7">Julho</option>
+        <option value="8">Agosto</option>
+        <option value="9">Setembro</option>
+        <option value="10">Outubro</option>
+        <option value="11">Novembro</option>
+        <option value="12">Dezembro</option>
+    </select>
+
+    <label for="statusSelector">Selecione o Status:</label>
+    <select id="statusSelector">
+        <option value="0">Pendente</option>
+        <option value="1">Em execução</option>
+        <option value="2">Concluído</option>
+    </select>
 
     <button class="button" id="openChartButton" onclick="window.location.href='grafico.html';">Abrir Gráfico</button>
 
@@ -48,7 +53,7 @@
         <thead>
             <tr>
                 <th>Nº</th>
-                <th>Data</th>
+                <th>Data/Hora</th>
                 <th>Nome</th>
                 <th>Tipo de Desastre</th>
                 <th>Endereço</th>
@@ -59,10 +64,9 @@
                 <th>Status</th>
             </tr>
         </thead>
-        <tbody id="occurrencesBody">
-        </tbody>
+        <tbody id="occurrencesBody"></tbody>
     </table>
 
-    <script src="script.js"></script>
+    <script type="module" src="js/script.js" defer></script>
 </body>
 </html>
