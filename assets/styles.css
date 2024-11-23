@@ -1,3 +1,4 @@
+/* Estilo base para o corpo */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -5,16 +6,19 @@ body {
     background-color: #f4f4f4;
 }
 
+/* Título principal */
 h1 {
     color: #333;
     text-align: center;
 }
 
+/* Cabeçalho da página */
 .header {
     text-align: center;
     margin-bottom: 20px;
 }
 
+/* Filtros (select) */
 .filters {
     display: flex;
     justify-content: center;
@@ -22,15 +26,18 @@ h1 {
     margin-bottom: 20px;
 }
 
+/* Estilo para rótulos */
 label {
     font-weight: bold;
 }
 
+/* Estilo dos campos select */
 select {
     padding: 5px;
     font-size: 1em;
 }
 
+/* Estilo do botão */
 .button {
     margin: 20px auto;
     padding: 10px 20px;
@@ -48,6 +55,7 @@ select {
     background-color: #45a049;
 }
 
+/* Estilo da tabela */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -64,11 +72,71 @@ th {
     background-color: #f2f2f2;
 }
 
+/* Estilo das imagens */
 img {
     max-width: 100px;
     height: auto;
 }
 
+/* Cores dos status */
 .status-pendente { color: red; }
 .status-em-execucao { color: blue; }
 .status-concluido { color: green; }
+
+/* Media query para telas menores */
+@media (max-width: 768px) {
+    /* Ajuste no tamanho da fonte do título */
+    h1 {
+        font-size: 1.4em;
+    }
+
+    /* Ajuste no layout dos filtros */
+    .filters {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Ajustes no select e label */
+    select, label {
+        font-size: 1em;
+        width: 100%;
+    }
+
+    /* Ajustes no botão */
+    .button {
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* Ajustes nas células da tabela */
+    th, td {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+
+    /* Ajuste no tamanho da imagem */
+    img {
+        max-width: 80px;
+    }
+}
+
+/* Media query para telas muito pequenas (smartphones) */
+@media (max-width: 480px) {
+    /* Redução no tamanho do título */
+    h1 {
+        font-size: 1.2em;
+    }
+
+    /* Ajustes no layout da tabela */
+    table {
+        font-size: 0.8em;
+        overflow-x: auto;
+        display: block;
+    }
+
+    /* Ajustes no tamanho do botão */
+    .button {
+        padding: 14px;
+        font-size: 1.1em;
+    }
+}
