@@ -15,7 +15,7 @@ const db = getFirestore(app);
 
 const audio = new Audio('assets/images/sirene de escola - Efeito sonoro.mp3');
 let displayedOccurrenceIds = [];
-let lastTimestamp = null;
+let lastTimestamp = localStorage.getItem('lastTimestamp'); // Pega o timestamp do localStorage
 
 function loadOccurrences(month = null, status = null) {
     console.log("Carregando ocorrências...");
@@ -48,7 +48,7 @@ function loadOccurrences(month = null, status = null) {
             }
 
             const occurrenceDate = new Date(occurrence.timestamp.seconds * 1000);
-            if (lastTimestamp === null || occurrenceDate > lastTimestamp) {
+            if (lastTimestamp === null || occurrenceDate > new Date(lastTimestamp)) {
                 hasNewOccurrence = true;
             }
 
@@ -91,8 +91,9 @@ function loadOccurrences(month = null, status = null) {
         console.log(`Número total de ocorrências exibidas: ${index}`);
 
         if (hasNewOccurrence) {
-            audio.play();
-            lastTimestamp = new Date();
+            audio.play();  // Toca a sirene se houver uma nova ocorrência
+            lastTimestamp = new Date().toISOString();  // Atualiza o timestamp
+            localStorage.setItem('lastTimestamp', lastTimestamp);  // Armazena o timestamp atualizado
         }
     }, (error) => {
         console.error("Erro ao buscar ocorrências:", error);
