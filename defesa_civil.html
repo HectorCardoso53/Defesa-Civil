@@ -8,16 +8,32 @@
 </head>
 <body>
     <script type="module">
+        // Importar as funções necessárias do SDK do Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
-    
-        // Inicializa o Firebase Authentication
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZLAxqJiaFckcBL5Hb3e5ldQ3hhlacWx4",
+            authDomain: "conecta-orixi.firebaseapp.com",
+            projectId: "conecta-orixi",
+            storageBucket: "conecta-orixi.appspot.com",
+            messagingSenderId: "1040105797660",
+            appId: "1:1040105797660:web:18d67b8c104d09543dc7d9"
+        };
+
+        // Inicializa o Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // Inicializa a autenticação
         const auth = getAuth();
-    
-        // Verifica se o usuário está autenticado após a página carregar
+
+        // Verifica o estado de autenticação do usuário
         document.addEventListener('DOMContentLoaded', () => {
             onAuthStateChanged(auth, (user) => {
                 if (!user) {
-                    // Redireciona para a página de login se o usuário não estiver autenticado
+                    // Exibe uma mensagem de alerta e redireciona para a página de login
+                    alert("Você precisa se autenticar para acessar as ocorrências.");
                     window.location.href = "index.html";
                 } else {
                     // Exibe o usuário autenticado no console
@@ -26,7 +42,6 @@
             });
         });
     </script>
-    
 
     <div style="text-align: center; margin-bottom: 20px;">
         <img src="assets/images/logo.jpeg" alt="logo" style="max-width: 150px">

@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
 
 // Configuração do Firebase
@@ -17,6 +17,12 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Inicializa o Amplitude (adicione sua chave de API)
+amplitude.init("AIzaSyCZLAxqJiaFckcBL5Hb3e5ldQ3hhlacWx4", {
+    defaultTracking: true,  // Ativa o rastreamento dos eventos padrão
+});
+
+
 // Função para obter ocorrências
 async function fetchOccurrences() {
     const user = auth.currentUser;
@@ -32,9 +38,11 @@ async function fetchOccurrences() {
             console.log("Ocorrências: ", occurrences);
         } catch (error) {
             console.error("Erro ao buscar ocorrências: ", error);
+            alert("Houve um erro ao carregar as ocorrências. Tente novamente mais tarde.");
         }
     } else {
         console.error("Usuário não autenticado!");
+        alert("Você precisa estar autenticado para acessar as ocorrências.");
     }
 }
 
@@ -91,4 +99,13 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
                 errorMessage.textContent = "Erro no login: " + error.message;
             }
         });
+});
+
+// Verifica a autenticação em tempo real
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("Usuário autenticado: ", user.email);
+    } else {
+        console.log("Usuário não autenticado.");
+    }
 });
