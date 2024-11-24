@@ -9,12 +9,16 @@
 <body>
     <script type="module">
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
-
+    
         const auth = getAuth();
+    
         onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                // Redirecionar para a página de login se o usuário não estiver autenticado
-                window.location.href = "login.html";
+            if (user) {
+                // Usuário autenticado, permitir acesso
+                console.log("Usuário autenticado:", user.email);
+            } else {
+                // Redirecionar para a página de login
+                window.location.href = "index.html";
             }
         });
     </script>
