@@ -11,7 +11,8 @@
     <div id="map" style="width: 100%; height: 1000px;"></div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js";
-        import { getFirestore, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
 
         // Configuração do Firebase
         const firebaseConfig = {
@@ -26,6 +27,20 @@
         // Inicializar o Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+
+        // Inicializa a autenticação
+        const auth = getAuth();
+
+        // Verifica o estado de autenticação do usuário
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // Exibe uma mensagem de alerta e redireciona para a página de login
+                alert("Você precisa se autenticar para acessar as ocorrências.");
+                window.location.href = "index.html"; // Redireciona para a página de login
+            } else {
+                console.log("Usuário autenticado:", user.email);
+            }
+        });
 
         // Inicializar o mapa com coordenada inicial em Oriximiná
         const map = L.map('map', {
