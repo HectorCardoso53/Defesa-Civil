@@ -1,0 +1,26 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo-container img {
+    max-width: 150px;
+}
