@@ -13,7 +13,10 @@
     <h1>Gráfico de Ocorrências por Mês</h1>
     <canvas id="occurrencesChart"></canvas>
 
-    <button id="downloadPdfBtn">Baixar PDF</button>
+    <div class="buttons">
+        <button id="downloadPdfBtn">Baixar PDF</button>
+        <button id="viewMapBtn">Abrir Mapa</button> <!-- Botão para abrir o mapa -->
+    </div>
 
     <!-- Carregar a biblioteca Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -25,6 +28,7 @@
     <script type="module" src="js/grafic.js"></script>
 
     <script>
+        // Função para baixar PDF
         document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
             const { jsPDF } = window.jspdf;
 
@@ -49,6 +53,11 @@
 
             pdf.addImage(imageData, 'PNG', xOffset, yOffset, imgWidth, imgHeight);
             pdf.save('grafico-ocorrencias.pdf');
+        });
+
+        // Função para abrir o mapa em nova aba
+        document.getElementById('viewMapBtn').addEventListener('click', () => {
+            window.open('map.html', '_blank'); // Abre a página map.html em nova aba
         });
     </script>
 </body>
