@@ -13,10 +13,43 @@
     <h1>Gráfico de Ocorrências por Mês</h1>
     <canvas id="occurrencesChart"></canvas>
 
+    <button id="downloadPdfBtn">Baixar PDF</button>
+
     <!-- Carregar a biblioteca Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+    <!-- Carregar a biblioteca jsPDF e html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <!-- Carregar o Firebase SDK e a lógica do gráfico -->
     <script type="module" src="js/grafic.js"></script>
+
+    <script>
+        document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
+            const { jsPDF } = window.jspdf;
+
+            // Capturar o gráfico como imagem
+            const canvas = document.getElementById('occurrencesChart');
+            const canvasImage = await html2canvas(canvas);
+
+            const imageData = canvasImage.toDataURL('image/png');
+            
+            // Criar o PDF
+            const pdf = new jsPDF();
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const imageWidth = canvas.width;
+            const imageHeight = canvas.height;
+
+            const scaleFactor = Math.min(pageWidth / imageWidth, pageHeight / imageHeight);
+            const imgWidth = imageWidth * scaleFactor;
+            const imgHeight = imageHeight * scaleFactor;
+            const xOffset = (pageWidth - imgWidth) / 2;
+            const yOffset = (pageHeight - imgHeight) / 2;
+
+            pdf.addImage(imageData, 'PNG', xOffset, yOffset, imgWidth, imgHeight);
+            pdf.save('grafico-ocorrencias.pdf');
+        });
+    </script>
 </body>
 </html>
