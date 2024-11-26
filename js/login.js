@@ -79,7 +79,7 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
 
             // Aguarda um momento antes de redirecionar, para o usuário ver a mensagem
             setTimeout(() => {
-                window.location.href = "defesa_civil.html"; // Redireciona para a página inicial
+                window.location.href = "/html/defesa_civil.html"; // Redireciona para a página inicial
             }, 1000); // Atraso de 1 segundo
         })
         .catch((error) => {

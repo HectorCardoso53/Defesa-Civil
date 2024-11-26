@@ -13,7 +13,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const audio = new Audio('assets/images/sirene de escola - Efeito sonoro.mp3');
+const audio = new Audio('assets/sound/sirene de escola - Efeito sonoro.mp3');
 let displayedOccurrenceIds = [];
 let lastTimestamp = localStorage.getItem('lastTimestamp'); // Pega o timestamp do localStorage
 
