@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa com Firebase</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <!-- Seletor para filtro por mês -->
+    <div style="margin: 10px;">
+        <label for="monthFilter">Filtrar por mês:</label>
+        <select id="monthFilter">
+            <option value="all">Todos</option>
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+        </select>
+        <button id="applyFilter">Aplicar Filtro</button>
+    </div>
+
+    <div id="map" style="width: 100%; height: 1000px;"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-firestore.js";
+
+        // Configuração do Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZLAxqJiaFckcBL5Hb3e5ldQ3hhlacWx4",
+            authDomain: "conecta-orixi.firebaseapp.com",
+            projectId: "conecta-orixi",
+            storageBucket: "conecta-orixi.appspot.com",
+            messagingSenderId: "1040105797660",
+            appId: "1:1040105797660:web:18d67b8c104d09543dc7d9"
+        };
+
+        // Inicializar o Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Inicializa a autenticação
+        const auth = getAuth();
+
+        // Verifica o estado de autenticação do usuário
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                alert("Você precisa se autenticar para acessar as ocorrências.");
+                window.location.href = "index.html";
+            }
+        });
+
+        // Inicializar o mapa
+        const map = L.map('map').setView([-1.7633858, -55.8633922], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Referenciar a coleção 'occurrences' no Firestore
+        const occurrencesRef = collection(db, "occurrences");
+        let allMarkers = []; // Array para armazenar os marcadores
+
+        const loadMarkers = (month) => {
+            // Remover todos os marcadores do mapa
+            allMarkers.forEach(marker => map.removeLayer(marker));
+            allMarkers = [];
+
+            onSnapshot(occurrencesRef, (snapshot) => {
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const { location, description, name, disasterType, timestamp } = data;
+
+                    // Filtro pelo mês
+                    if (timestamp) {
+                        const date = new Date(timestamp.seconds * 1000); // Converter timestamp do Firestore
+                        const docMonth = date.getMonth() + 1; // Obter mês (1-12)
+
+                        if (month !== "all" && parseInt(month) !== docMonth) return;
+                    }
+
+                    if (location) {
+                        const coords = location.split('query=')[1]?.split(',');
+                        if (coords && coords.length === 2) {
+                            const lat = parseFloat(coords[0]);
+                            const lng = parseFloat(coords[1]);
+
+                            // Adicionar marcador no mapa
+                            const marker = L.marker([lat, lng], {
+                                icon: L.icon({
+                                    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+                                    iconSize: [20, 31],
+                                    iconAnchor: [10, 31],
+                                    popupAnchor: [1, -34]
+                                })
+                            }).addTo(map).bindPopup(`
+                                <b>Nome: ${name || 'Sem nome'}</b><br>
+                                <i>Desastre: ${disasterType || 'Tipo não especificado'}</i><br>
+                                <p>Descrição: ${description || 'Sem descrição'}</p>
+                                <a href="${location}" target="_blank">Ver no Google Maps</a>
+                            `);
+
+                            allMarkers.push(marker);
+                        }
+                    }
+                });
+            });
+        };
+
+        // Carregar todos os marcadores ao iniciar
+        loadMarkers("all");
+
+        // Aplicar o filtro ao clicar no botão
+        document.getElementById("applyFilter").addEventListener("click", () => {
+            const month = document.getElementById("monthFilter").value;
+            loadMarkers(month);
+        });
+    </script>
+</body>
+</html>
