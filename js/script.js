@@ -1,19 +1,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
 import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyCZLAxqJiaFckcBL5Hb3e5ldQ3hhlacWx4",
-    authDomain: "conecta-orixi.firebaseapp.com",
-    projectId: "conecta-orixi",
-    storageBucket: "conecta-orixi.appspot.com",
-    messagingSenderId: "1040105797660",
-    appId: "1:1040105797660:web:18d67b8c104d09543dc7d9"
-};
+import { firebaseConfig } from '../config/firebase_config.js';
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const audio = new Audio('assets/sound/sirene de escola - Efeito sonoro.mp3');
+const audio = new Audio('../assets/audio/sirene_de_escola.mp3');
+
 let displayedOccurrenceIds = [];
 let lastTimestamp = localStorage.getItem('lastTimestamp'); // Pega o timestamp do localStorage
 
@@ -26,7 +19,7 @@ function loadOccurrences(month = null, status = null) {
     loadingMessage.innerHTML = '<td colspan="10" style="text-align:center;">Carregando...</td>';
     occurrencesBody.appendChild(loadingMessage);
 
-    let occurrenceCount = 0;
+    //let occurrenceCount = 0;
     onSnapshot(collection(db, "occurrences"), (snapshot) => {
         occurrencesBody.innerHTML = ''; // Limpa a tabela antes de adicionar os resultados
 

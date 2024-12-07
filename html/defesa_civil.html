@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registros de Ocorrências</title>
+    <!-- Definindo o favicon logo que aprece na aba da pagina -->
+    <link rel="icon" href="../assets/images/logo.jpeg" type="image/jpeg">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
@@ -11,20 +13,10 @@
         // Importar as funções necessárias do SDK do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
-
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyCZLAxqJiaFckcBL5Hb3e5ldQ3hhlacWx4",
-            authDomain: "conecta-orixi.firebaseapp.com",
-            projectId: "conecta-orixi",
-            storageBucket: "conecta-orixi.appspot.com",
-            messagingSenderId: "1040105797660",
-            appId: "1:1040105797660:web:18d67b8c104d09543dc7d9"
-        };
+        import { firebaseConfig } from '../config/firebase_config.js';
 
         // Inicializa o Firebase
         const app = initializeApp(firebaseConfig);
-
         // Inicializa a autenticação
         const auth = getAuth();
 

@@ -1,26 +1,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore.js";
-
-// Configuração do Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyCZLAxqJiaFckcBL5Hb3e5ldQ3hhlacWx4",
-    authDomain: "conecta-orixi.firebaseapp.com",
-    projectId: "conecta-orixi",
-    storageBucket: "conecta-orixi.appspot.com",
-    messagingSenderId: "1040105797660",
-    appId: "1:1040105797660:web:18d67b8c104d09543dc7d9"
-};
+import { firebaseConfig } from '../config/firebase_config.js';
 
 // Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
-// Inicializa o Amplitude (adicione sua chave de API)
-amplitude.init("AIzaSyCZLAxqJiaFckcBL5Hb3e5ldQ3hhlacWx4", {
-    defaultTracking: true,  // Ativa o rastreamento dos eventos padrão
-});
 
 
 // Função para obter ocorrências
@@ -88,7 +74,7 @@ document.getElementById("loginForm").addEventListener("submit", (event) => {
             // Limpa o indicador de carregamento
             loadingMessage.remove();
 
-            // Exibe a mensagem de erro amigável
+            // Exibe a mensagem de erro 
             if (error.code === 'auth/invalid-email') {
                 errorMessage.textContent = "E-mail inválido. Verifique o formato do e-mail.";
             } else if (error.code === 'auth/wrong-password') {

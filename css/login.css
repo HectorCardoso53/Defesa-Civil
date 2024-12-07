@@ -37,7 +37,7 @@ body {
 /* Inputs do formulário */
 .login-container input[type="email"],
 .login-container input[type="password"] {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
@@ -54,7 +54,7 @@ body {
 
 /* Botão de login */
 .login-container button {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     margin-top: 20px;
     font-size: 16px;
@@ -64,11 +64,12 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease;
 }
 
 .login-container button:hover {
-    background-color: #ff9900;
+    background-color: #ff7f00; /* Cor mais escura ao passar o mouse */
+    transform: translateY(-3px); /* Levanta o botão quando o mouse passa */
 }
 
 /* Mensagem de erro */
