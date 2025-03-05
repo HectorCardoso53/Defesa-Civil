@@ -10,7 +10,12 @@ const audio = new Audio('../assets/audio/sirene_de_escola.mp3');
 let displayedOccurrenceIds = [];
 let lastTimestamp = localStorage.getItem('lastTimestamp'); // Pega o timestamp do localStorage
 
-function loadOccurrences(month = null, status = null) {
+// Obter os elementos de seleção de mês, status e ano
+const monthSelector = document.getElementById('monthSelector');
+const statusSelector = document.getElementById('statusSelector');
+const yearSelector = document.getElementById('yearSelector');
+
+function loadOccurrences(month = null, status = null, year = null) {
     console.log("Carregando ocorrências...");
     const occurrencesBody = document.getElementById('occurrencesBody');
     occurrencesBody.innerHTML = ''; // Limpa a tabela para recarregar
@@ -19,16 +24,19 @@ function loadOccurrences(month = null, status = null) {
     loadingMessage.innerHTML = '<td colspan="10" style="text-align:center;">Carregando...</td>';
     occurrencesBody.appendChild(loadingMessage);
 
-    //let occurrenceCount = 0;
     onSnapshot(collection(db, "occurrences"), (snapshot) => {
+        // Limpa a tabela após carregar as ocorrências
         occurrencesBody.innerHTML = ''; // Limpa a tabela antes de adicionar os resultados
 
         let index = 0;
         let hasNewOccurrence = false;
 
         if (snapshot.empty) {
-            console.log("Nenhuma ocorrência encontrada.");
-            return;
+            // Cria uma linha de mensagem informando que não há ocorrências
+            const noOccurrencesMessage = document.createElement('tr');
+            noOccurrencesMessage.innerHTML = '<td colspan="10" style="text-align:center;">Nenhuma ocorrência encontrada.</td>';
+            occurrencesBody.appendChild(noOccurrencesMessage);
+            return; // Termina a função se não houver ocorrências
         }
 
         snapshot.forEach(doc => {
@@ -41,26 +49,20 @@ function loadOccurrences(month = null, status = null) {
             }
 
             const occurrenceDate = new Date(occurrence.timestamp.seconds * 1000);
-            if (lastTimestamp === null || occurrenceDate > new Date(lastTimestamp)) {
-                hasNewOccurrence = true;
-            }
-
-            const occurrenceMonth = occurrenceDate.getMonth() + 1;
+            const occurrenceMonth = occurrenceDate.getMonth() + 1;  // Mês (1-12)
+            const occurrenceYear = occurrenceDate.getFullYear(); // Ano
             const occurrenceStatus = Number(occurrence.status); // Garantir tipo numérico
 
-            // Verificar se o mês e o status coincidem com os filtros
+            // Verificar se o mês, o status e o ano coincidem com os filtros
             const monthMatches = month ? occurrenceMonth === month : true;
             const statusMatches = (status !== null && status === occurrenceStatus); // Exibir apenas status correspondentes
+            const yearMatches = year ? occurrenceYear === year : true; // Verificar se o ano também corresponde
 
-            if (!monthMatches || !statusMatches) {
+            if (!monthMatches || !statusMatches || !yearMatches) {
                 return; // Ignorar ocorrências que não correspondem aos filtros
             }
 
             // Se chegou aqui, significa que os filtros coincidem
-            if (!displayedOccurrenceIds.includes(occurrenceId)) {
-                displayedOccurrenceIds.push(occurrenceId);
-            }
-
             index++;
             const statusClass = getStatusClass(occurrenceStatus);
             const locationLink = occurrence.location || 'Localização não informada';
@@ -93,6 +95,32 @@ function loadOccurrences(month = null, status = null) {
     });
 }
 
+
+// Atualização dos filtros e chamadas:
+function updateFilters() {
+    const selectedMonth = parseInt(monthSelector.value);
+    const selectedStatus = parseInt(statusSelector.value);
+    const selectedYear = parseInt(yearSelector.value); // Adicionando o filtro de ano
+    console.log(`Mês selecionado: ${selectedMonth}, Status selecionado: ${selectedStatus}, Ano selecionado: ${selectedYear}`);
+    loadOccurrences(selectedMonth, selectedStatus, selectedYear);
+}
+
+// Definir o mês atual, ano e status "Pendente" como padrão
+const currentMonth = new Date().getMonth() + 1;  // Meses começam do 0 no JavaScript, então adiciona 1
+const currentYear = new Date().getFullYear();  // Ano atual
+const currentStatus = 0;  // Pendente
+
+// Carregar as ocorrências com os valores padrão
+loadOccurrences(currentMonth, currentStatus, currentYear);
+monthSelector.value = currentMonth;
+statusSelector.value = currentStatus;
+yearSelector.value = currentYear;
+
+// Adicionar os event listeners após os elementos estarem definidos
+monthSelector.addEventListener('change', updateFilters);
+statusSelector.addEventListener('change', updateFilters);
+yearSelector.addEventListener('change', updateFilters);
+
 function getStatusName(status) {
     const statusNames = {
         0: 'Pendente',
@@ -110,30 +138,3 @@ function getStatusClass(status) {
     };
     return statusClasses[status] || '';
 }
-
-// Definir o mês atual e o status "Pendente" como padrão
-const currentMonth = new Date().getMonth() + 1;  // Meses começam do 0 no JavaScript, então adiciona 1
-const currentStatus = 0;  // Pendente
-
-loadOccurrences(currentMonth, currentStatus);
-
-const monthSelector = document.getElementById('monthSelector');
-const statusSelector = document.getElementById('statusSelector');
-
-// Definir o valor selecionado dos filtros ao carregar
-monthSelector.value = currentMonth;
-statusSelector.value = currentStatus;
-
-monthSelector.addEventListener('change', () => {
-    const selectedMonth = parseInt(monthSelector.value);
-    const selectedStatus = parseInt(statusSelector.value);
-    console.log(`Mês selecionado: ${selectedMonth}, Status selecionado: ${selectedStatus}`);
-    loadOccurrences(selectedMonth, selectedStatus);
-});
-
-statusSelector.addEventListener('change', () => {
-    const selectedStatus = parseInt(statusSelector.value);
-    const selectedMonth = parseInt(monthSelector.value);
-    console.log(`Mês selecionado: ${selectedMonth}, Status selecionado: ${selectedStatus}`);
-    loadOccurrences(selectedMonth, selectedStatus);
-});

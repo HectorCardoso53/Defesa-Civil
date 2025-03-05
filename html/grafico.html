@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gráfico de Ocorrências por Mês</title>
-    <!-- Definindo o favicon logo que aprece na aba da pagina -->
+    <!-- Definindo o favicon logo que aparece na aba da página -->
     <link rel="icon" href="../assets/images/logo.jpeg" type="image/jpeg">
     <link rel="stylesheet" href="../css/grafic.css"> <!-- Linkando o arquivo CSS -->
 </head>
@@ -13,6 +13,14 @@
         <img src="../assets/images/logo.jpeg" alt="logo">
     </div>
     <h1>Gráfico de Ocorrências por Mês</h1>
+
+    <!-- Campo de seleção para o ano -->
+    <label for="yearSelect">Escolha o ano:</label>
+    <select id="yearSelect">
+        <!-- Os anos serão inseridos aqui dinamicamente -->
+    </select>
+
+    <!-- Canvas do gráfico -->
     <canvas id="occurrencesChart"></canvas>
 
     <div class="buttons">
@@ -32,30 +40,52 @@
     <script>
         // Função para baixar PDF
         document.getElementById('downloadPdfBtn').addEventListener('click', async () => {
-            const { jsPDF } = window.jspdf;
+    const { jsPDF } = window.jspdf;
 
-            // Capturar o gráfico como imagem
-            const canvas = document.getElementById('occurrencesChart');
-            const canvasImage = await html2canvas(canvas);
+    // Capturar o gráfico como imagem
+    const canvas = document.getElementById('occurrencesChart');
+    const canvasImage = await html2canvas(canvas);
+    const imageData = canvasImage.toDataURL('image/png');
+    
+    // Criar o PDF
+    const pdf = new jsPDF();
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const imageWidth = canvas.width;
+    const imageHeight = canvas.height;
 
-            const imageData = canvasImage.toDataURL('image/png');
-            
-            // Criar o PDF
-            const pdf = new jsPDF();
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const imageWidth = canvas.width;
-            const imageHeight = canvas.height;
+    // Ajuste para a escala do gráfico
+    const scaleFactor = Math.min(pageWidth / imageWidth, pageHeight / imageHeight);
+    const imgWidth = imageWidth * scaleFactor;
+    const imgHeight = imageHeight * scaleFactor;
 
-            const scaleFactor = Math.min(pageWidth / imageWidth, pageHeight / imageHeight);
-            const imgWidth = imageWidth * scaleFactor;
-            const imgHeight = imageHeight * scaleFactor;
-            const xOffset = (pageWidth - imgWidth) / 2;
-            const yOffset = (pageHeight - imgHeight) / 2;
+    // Posições
+    const logo = '../assets/images/logo.jpeg'; // Caminho para a logo
+    const logoWidth = 40; // Largura da logo no PDF
+    const logoHeight = 40; // Altura da logo no PDF
+    
+    // Centralizando a logo
+    const logoX = (pageWidth - logoWidth) / 2; // Centraliza a logo na página
+    const logoY = 10; // Posição Y da logo (topo da página)
 
-            pdf.addImage(imageData, 'PNG', xOffset, yOffset, imgWidth, imgHeight);
-            pdf.save('grafico-ocorrencias.pdf');
-        });
+    // Adicionando a logo no topo centralizado
+    pdf.addImage(logo, 'JPEG', logoX, logoY, logoWidth, logoHeight); // Adiciona logo
+
+    // Adicionando o texto "Ocorrências do Mês" abaixo da logo
+    pdf.setFontSize(16); // Define o tamanho da fonte para o texto
+    const textX = (pageWidth - pdf.getTextWidth('Ocorrências do Mês')) / 2; // Centraliza o texto horizontalmente
+    const textY = logoY + logoHeight + 15; // 5 pixels abaixo da logo
+    pdf.text('Ocorrências do Mês', textX, textY); // Texto abaixo da logo
+
+    // Adicionando o gráfico
+    const yOffset = textY + 10; // 10 pixels abaixo do texto
+    const imgX = (pageWidth - imgWidth) / 2; // Centraliza o gráfico na página
+    pdf.addImage(imageData, 'PNG', imgX, yOffset, imgWidth, imgHeight); // Gráfico centralizado
+
+    // Salvando o PDF
+    pdf.save('grafico-ocorrencias.pdf');
+});
+
 
         // Função para abrir o mapa em nova aba
         document.getElementById('viewMapBtn').addEventListener('click', () => {
