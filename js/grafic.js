@@ -72,7 +72,7 @@ function fillYearSelect(occurrencesByYear) {
 
 // Função para renderizar o gráfico
 function renderChart(occurrencesByYear, selectedYear) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
     const ctx = document.getElementById('occurrencesChart').getContext('2d');
     const yearToShow = selectedYear || new Date().getFullYear();
     const dataForSelectedYear = occurrencesByYear[yearToShow] || Array(12).fill(0);
