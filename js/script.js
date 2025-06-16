@@ -13,7 +13,19 @@ let lastTimestamp = localStorage.getItem('lastTimestamp'); // Pega o timestamp d
 // Obter os elementos de seleção de mês, status e ano
 const monthSelector = document.getElementById('monthSelector');
 const statusSelector = document.getElementById('statusSelector');
-const yearSelector = document.getElementById('yearSelector');
+const yearSelector = document.getElementById("yearSelector");
+const currentYear = new Date().getFullYear();
+
+for (let y = 2025; y <= currentYear + 5; y++) {
+    const option = document.createElement("option");
+    option.value = y;
+    option.textContent = y;
+    yearSelector.appendChild(option);
+}
+
+// Opcional: definir o valor padrão para o ano atual, se quiser
+yearSelector.value = currentYear;
+
 
 function loadOccurrences(month = null, status = null, year = null) {
     console.log("Carregando ocorrências...");
@@ -107,7 +119,6 @@ function updateFilters() {
 
 // Definir o mês atual, ano e status "Pendente" como padrão
 const currentMonth = new Date().getMonth() + 1;  // Meses começam do 0 no JavaScript, então adiciona 1
-const currentYear = new Date().getFullYear();  // Ano atual
 const currentStatus = 0;  // Pendente
 
 // Carregar as ocorrências com os valores padrão

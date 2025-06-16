@@ -57,12 +57,8 @@
     </select>
 
     <label for="yearSelector">Selecione o Ano:</label>
-    <select id="yearSelector">
-        <option value="2024">2024</option>
-        <option value="2025">2025</option>
-        <option value="2026">2026</option>
-        <!-- Adicione mais anos conforme necessário -->
-    </select>
+    <select id="yearSelector"></select>
+
 
     <label for="statusSelector">Selecione o Status:</label>
     <select id="statusSelector">
@@ -71,7 +67,10 @@
         <option value="2">Concluído</option>
     </select>
 
-    <button class="button" id="openChartButton" onclick="window.location.href='grafico.html';">Abrir Gráfico</button>
+   <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+  <button class="button" style="margin: 0;" onclick="window.location.href='grafico.html';">Abrir Gráfico</button>
+  <button class="button" style="margin: 0;" onclick="window.location.href='map.html';">Abrir Mapa</button>
+</div>
 
     <table>
         <thead>
